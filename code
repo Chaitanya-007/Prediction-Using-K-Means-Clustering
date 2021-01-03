@@ -1,0 +1,42 @@
+
+#Load the Dataset:-
+
+iris=read.csv("E:/Iris.csv")
+View(iris)
+
+#Removing unwanted attributes and store new dataset in new vector:-
+
+iris.features = iris
+iris.features$Species<- NULL
+View(iris.features)
+
+# Apply The Elbow Method to find the optimal no. of clusters:-
+
+set.seed(6)
+wcss<- vector()
+for (i in 1:10) 
+ {
+    wcss[i]<-sum(kmeans(iris.features,i)$withinss)
+ 
+ }
+
+plot(1:10,wcss,type = "b",main = paste("This is Elbow Method To Find Optimal NO. Of Clusters"),xlab = "No. Of Clusters",ylab = "Within Cluster Sum Square")
+
+#Apply the algorithm:-
+
+results=kmeans(iris.features, 3)
+results
+
+#Compare the cluster with species with tabular or confusion matrix form:-
+table(iris$Species, results$cluster)
+
+
+#plot/ Visualizing the clusters:-
+
+#1.Petal Length & Petal Width:-
+plot(iris[c("PetalLengthCm","PetalWidthCm")], col=results$cluster)
+
+#2.Sepal Length & Sepal Width;-
+plot(iris[c("SepalLengthCm","SepalWidthCm")], col=results$cluster)
+
+
